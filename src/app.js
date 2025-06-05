@@ -3,12 +3,13 @@ import productRoutes from './routes/products.routes.js';
 import cartRoutes from './routes/carts.routes.js';
 
 const app = express();
+const PORT = 8080;
 app.use(express.json());
 
 app.use('/api/products', productRoutes);
 app.use('/api/carts', cartRoutes);
 
-app.listen(8080, () => {
-  console.log('Servidor escuchando en el puerto 8080');
+app.listen(PORT, () => {
+  console.log(`servidor corriendo en http://localhost:${PORT}`);
 });
 
