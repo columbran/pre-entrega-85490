@@ -1,0 +1,30 @@
+[
+  {
+    "id": "1748987249715",
+    "title": "Camisa",
+    "description": "Camisa azul de algodón",
+    "code": "CAM123",
+    "price": 2300,
+    "status": true,
+    "stock": 5,
+    "category": "ropa",
+    "thumbnails": [
+      "ruta/a/imagen1.jpg",
+      "ruta/a/imagen2.jpg"
+    ]
+  },
+  {
+    "id": "1748987768825",
+    "title": "Remera",
+    "description": "remera negra de algodón",
+    "code": "NB001",
+    "price": 2500,
+    "status": true,
+    "stock": 10,
+    "category": "ropa",
+    "thumbnails": [
+      "images/remera1.jpg",
+      "images/remera2.jpg"
+    ]
+  }
+]
