@@ -14,17 +14,15 @@
     ]
   },
   {
-    "id": "1748987768825",
-    "title": "Remera",
-    "description": "remera negra de algodón",
-    "code": "NB001",
-    "price": 2500,
-    "status": true,
-    "stock": 10,
-    "category": "ropa",
+    "id": "1751412629931",
+    "title": "buzo",
+    "description": "poliester",
+    "code": "2",
+    "price": 4,
+    "stock": 3,
+    "category": "sdad",
     "thumbnails": [
-      "images/remera1.jpg",
-      "images/remera2.jpg"
+      ""
     ]
   }
 ]
