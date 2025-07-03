@@ -1,79 +1,82 @@
-Entrega N° 1
-Descripción General
-Desarrollar un servidor que contenga los endpoints y servicios necesarios para gestionar los productos y carritos de compra para tu API.
+# 🧾 Proyecto Backend – Coderhouse
 
-Requisitos de la Primera Entrega
-Desarrollo del Servidor
-El servidor debe estar basado en Node.js y Express, y debe escuchar en el puerto 8080. Se deben disponer dos grupos de rutas: /products y /carts. Estos endpoints estarán implementados con el router de Express, con las siguientes especificaciones:
+## Alumno: Silvio Columbran  
+📆 Entrega N°1 y N°2 – Julio 2025  
+👨‍💻 Comisión: 85490
 
-Rutas para Manejo de Productos (/api/products/)
-GET /:
-Debe listar todos los productos de la base de datos.
+---
 
+## ✅ Entrega N°1: API REST con Persistencia en Archivos
 
-GET /:pid:
-Debe traer solo el producto con el id proporcionado.
+### Descripción General
 
+Desarrollar un servidor en Node.js con Express que gestione productos y carritos de compra a través de endpoints REST.  
+La información se guarda en archivos `.json`.
 
-POST /:
-Debe agregar un nuevo producto con los siguientes campos:
-id: Number/String (No se manda desde el body, se autogenera para asegurar que nunca se repitan los ids).
+---
 
-title: String
+### 📌 Rutas para productos (`/api/products/`)
 
-description: String
+| Método | Ruta               | Descripción                                    |
+|--------|--------------------|------------------------------------------------|
+| GET    | `/`                | Lista todos los productos                     |
+| GET    | `/:pid`            | Muestra el producto con id específico         |
+| POST   | `/`                | Agrega un nuevo producto                      |
+| PUT    | `/:pid`            | Actualiza un producto (sin modificar el id)   |
+| DELETE | `/:pid`            | Elimina el producto con ese id                |
 
-code: String
+---
 
-price: Number
+### 📌 Rutas para carritos (`/api/carts/`)
 
-status: Boolean
+| Método | Ruta                                   | Descripción                                        |
+|--------|----------------------------------------|----------------------------------------------------|
+| POST   | `/`                                    | Crea un nuevo carrito                              |
+| GET    | `/:cid`                                | Muestra los productos de un carrito                |
+| POST   | `/:cid/product/:pid`                   | Agrega producto al carrito (aumenta cantidad si ya existe) |
 
-stock: Number
+---
 
-category: String
+### 🗂 Persistencia
 
-thumbnails: Array de Strings (rutas donde están almacenadas las imágenes del producto).
+Los datos se almacenan en:
 
+- `products.json`
+- `carts.json`
 
+Usando las clases:
 
-PUT /:pid:
-Debe actualizar un producto por los campos enviados desde el body. No se debe actualizar ni eliminar el idal momento de hacer la actualización.
+- `ProductManager.js`
+- `CartManager.js`
 
+---
 
-DELETE /:pid:
-Debe eliminar el producto con el pid indicado.
+## ✅ Entrega N°2: WebSockets + Handlebars
 
+### Funcionalidad agregada
 
-Rutas para Manejo de Carritos (/api/carts/)
-POST /:
-Debe crear un nuevo carrito con la siguiente estructura:
-id: Number/String (Autogenerado para asegurar que nunca se dupliquen los ids).
+Se implementó un sistema de vistas con **Handlebars** y actualización en tiempo real usando **WebSockets (Socket.IO)**.
 
-products: Array que contendrá objetos que representen cada producto.
+---
 
+### 🔹 Vistas creadas
 
+| Ruta                          | Vista                    | Descripción                                        |
+|-------------------------------|--------------------------|----------------------------------------------------|
+| `/`                           | `home.handlebars`        | Muestra todos los productos (solo visualización)   |
+| `/realtimeproducts`           | `realTimeProducts.handlebars` | Permite agregar y eliminar productos en tiempo real |
 
-GET /:cid:
-Debe listar los productos que pertenecen al carrito con el cid proporcionado.
+---
 
+### 🔄 Funcionalidad WebSocket
 
-POST /:cid/product/:pid:
-Debe agregar el producto al arreglo products del carrito seleccionado, utilizando el siguiente formato:
-product: Solo debe contener el ID del producto.
+- Cuando un cliente agrega un producto desde el formulario, **todos los clientes conectados ven el cambio al instante**.
+- Si se elimina un producto, **también se actualiza automáticamente en todas las vistas**.
 
-quantity: Debe contener el número de ejemplares de dicho producto (se agregará de uno en uno).
+---
 
+### 🧪 ¿Cómo probarlo?
 
-Si un producto ya existente intenta agregarse, se debe incrementar el campo quantity de dicho producto.
-
-
-Persistencia de la Información
-La persistencia se implementará utilizando el sistema de archivos, donde los archivos products.json y carts.json respaldarán la información.
-
-Se debe utilizar el ProductManager desarrollado en el desafío anterior y crear un CartManager para gestionar el almacenamiento de estos archivos JSON.
-
-Nota: No es necesario realizar ninguna implementación visual, todo el flujo se puede realizar por Postman o por el cliente de tu preferencia.
-
-Formato del Entregable
-Proporcionar un enlace al repositorio de GitHub con el proyecto completo, sin la carpeta node_modules.
+1. Ejecutá el proyecto:
+   ```bash
+   node src/app.js
