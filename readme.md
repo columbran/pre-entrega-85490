@@ -3,6 +3,8 @@
 ## Alumno: Silvio Columbran  
 📆 Entrega N°1, N°2 y Final – Julio 2025  
 👨‍💻 Comisión: 85490
+📂 Repositorio: [github.com/columbran/backend-final-silvio-85490](https://github.com/columbran/backend-final-silvio-85490)  
+✉️ Email: silvio.columbran@gmail.com
 
 ---
 
