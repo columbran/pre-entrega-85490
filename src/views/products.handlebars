@@ -1,4 +1,4 @@
-<h1 class="text-center text-2xl font-bold my-4">Productos</h1>
+<h1 class="text-center">Productos</h1>
 
 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
   {{#each products}}
@@ -7,7 +7,7 @@
       <p>{{description}}</p>
       <p><strong>Precio:</strong> ${{price}}</p>
       <p><strong>Categoría:</strong> {{category}}</p>
-      <form action="/api/carts/{{cartId}}/product/{{_id}}" method="POST">
+      <form action="/api/carts/{{../cartId}}/product/{{_id}}" method="POST">
         <button type="submit" class="bg-blue-500 text-white px-3 py-1 rounded mt-2">
           Agregar al carrito
         </button>
@@ -20,15 +20,15 @@
 <div class="flex justify-center gap-4 my-4">
   {{#if hasPrevPage}}
     <a href="/?page={{prevPage}}" class="text-blue-500">⬅ Anterior</a>
-  {{else}}
-    <span class="text-gray-400">⬅ Anterior</span>
   {{/if}}
 
-  <span>Página <strong>{{page}}</strong> de <strong>{{totalPages}}</strong></span>
+  <span>Página {{page}} de {{totalPages}}</span>
 
   {{#if hasNextPage}}
     <a href="/?page={{nextPage}}" class="text-blue-500">Siguiente ➡</a>
-  {{else}}
-    <span class="text-gray-400">Siguiente ➡</span>
   {{/if}}
+</div>
+
+<div class="text-center mt-6">
+  <a href="/cart/{{cartId}}" class="text-green-600 underline">🛒 Ver mi carrito</a>
 </div>

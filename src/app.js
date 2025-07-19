@@ -2,63 +2,77 @@ import express from 'express';
 import { engine } from 'express-handlebars';
 import http from 'http';
 import { Server } from 'socket.io';
+import mongoose from 'mongoose';
+import connectDB from './config/db.js';
+
 import productRoutes from './routes/products.routes.js';
 import cartRoutes from './routes/carts.routes.js';
 import viewsRouter from './routes/views.routes.js';
-import ProductManager from './managers/ProductManager.js';
+
+import Product from './models/Product.js'; // Modelo Mongoose
 
 const app = express();
-const server = http.createServer(app); // servidor http
-const io = new Server(server); // servidor socket.io
+const server = http.createServer(app);
+const io = new Server(server);
 
 const PORT = 3000;
 
-// Middleware
+// 🟢 Conexión a MongoDB
+await connectDB();
+
+// 🧩 Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static('./src/public')); // carpeta para JS cliente
+app.use(express.static('./src/public'));
 
-// Handlebars
-app.engine('handlebars', engine());
+// 🛠️ Handlebars
+app.engine('handlebars', engine({
+  helpers: {
+    eq: (a, b) => a === b
+  }
+}));
 app.set('view engine', 'handlebars');
 app.set('views', './src/views');
 
-// Rutas
+// 📦 Rutas
 app.use('/api/products', productRoutes);
 app.use('/api/carts', cartRoutes);
 app.use('/', viewsRouter);
 
-// Pasar io a req para usar en rutas
+// WebSocket disponible en las rutas 
 app.use((req, res, next) => {
   req.io = io;
   next();
 });
 
-// WebSockets
-const productManager = new ProductManager('./src/data/products.json'); // ruta JSON
-
+// 🔄 WebSockets en tiempo real con MongoDB
 io.on('connection', async (socket) => {
-  console.log('Cliente conectado');
+  console.log('🧠 Cliente conectado a WebSocket');
 
-  // Enviar productos al conectar
-  const products = await productManager.getAll();
+  const products = await Product.find().lean();
   socket.emit('products', products);
 
-  // Agregar producto
-  socket.on('new-product', async (product) => {
-    await productManager.addProduct(product);
-    const updated = await productManager.getAll();
-    io.emit('products', updated);
+  socket.on('new-product', async (productData) => {
+    try {
+      await Product.create(productData);
+      const updated = await Product.find().lean();
+      io.emit('products', updated);
+    } catch (error) {
+      console.error('Error al crear producto:', error.message);
+    }
   });
 
-  // Eliminar producto
   socket.on('delete-product', async (id) => {
-    await productManager.deleteProduct(id);
-    const updated = await productManager.getAll();
-    io.emit('products', updated);
+    try {
+      await Product.findByIdAndDelete(id);
+      const updated = await Product.find().lean();
+      io.emit('products', updated);
+    } catch (error) {
+      console.error('Error al eliminar producto:', error.message);
+    }
   });
 });
 
 server.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
+  console.log(`✅ Servidor corriendo en http://localhost:${PORT}`);
 });
